@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { loadContacts } from '../redux/contactsSlice';
 import ContactForm from './ContactForm/ContactForm.jsx';
 import SearchBox from './SearchBox/SearchBox.jsx';
 import ContactList from './ContactList/ContactList.jsx';
@@ -6,49 +8,24 @@ import './App.css';
 import initialContacts from '../contacts.json';
 
 function App() {
-    const [contacts, setContacts] = useState([]);
-    const [filter, setFilter] = useState('');
-    const [isInitialLoad, setIsInitialLoad] = useState(true);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        const savedContacts = JSON.parse(window.localStorage.getItem('contacts'));
-        if (savedContacts && savedContacts.length > 0) {
-            setContacts(savedContacts);
+        const savedContacts = JSON.parse(window.localStorage.getItem('contacts')) || [];
+        if (savedContacts.length > 0) {
+            dispatch(loadContacts(savedContacts));
         } else {
-            setContacts(initialContacts);
+            dispatch(loadContacts(initialContacts));
             window.localStorage.setItem('contacts', JSON.stringify(initialContacts));
         }
-        setIsInitialLoad(false);
-    }, []);
-
-    useEffect(() => {
-        if (!isInitialLoad) {
-            window.localStorage.setItem('contacts', JSON.stringify(contacts));
-        }
-    }, [contacts, isInitialLoad]);
-
-    const addContact = (newContact) => {
-        setContacts((prevContacts) => [...prevContacts, newContact]);
-    };
-
-    const deleteContact = (id) => {
-        setContacts((prevContacts) => prevContacts.filter(contact => contact.id !== id));
-    };
-
-    const handleSearch = (e) => {
-        setFilter(e.target.value);
-    };
-
-    const filteredContacts = contacts.filter(contact =>
-        contact.name.toLowerCase().includes(filter.toLowerCase())
-    );
+    }, [dispatch]);
 
     return (
         <div>
             <h1>Phonebook</h1>
-            <ContactForm addContact={addContact} />
-            <SearchBox filter={filter} handleSearch={handleSearch} />
-            <ContactList contacts={filteredContacts} deleteContact={deleteContact} />
+            <ContactForm />
+            <SearchBox />
+            <ContactList />
         </div>
     );
 }
