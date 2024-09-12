@@ -13,11 +13,17 @@ const ContactList = () => {
     };
 
     return (
-        <ul className={styles.list}>
-            {contacts.map((contact) => (
-                <Contact key={contact.id} contact={contact} deleteContact={handleDelete} />
-            ))}
-        </ul>
+        <div className={styles.container}>
+            {contacts.length === 0 ? (
+                <p className={styles.emptyMessage}>Nothing is saved yet</p>
+            ) : (
+                <ul className={styles.list}>
+                    {contacts.map((contact) => (
+                        <Contact key={contact.id} contact={contact} deleteContact={handleDelete} />
+                    ))}
+                </ul>
+            )}
+        </div>
     );
 };
 

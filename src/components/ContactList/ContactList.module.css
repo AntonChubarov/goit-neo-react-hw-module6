@@ -8,3 +8,14 @@
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
+.container {
+    text-align: center;
+    padding: 10px;
+}
+
+.emptyMessage {
+    color: #ff7f7f;
+    font-size: 18px;
+    margin: 20px 0;
+}
